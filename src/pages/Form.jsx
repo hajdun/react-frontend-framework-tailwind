@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { createRoot } from 'react-dom/client'
 
-import { useForm } from '@tanstack/react-form'
+import { revalidateLogic, useForm } from '@tanstack/react-form'
 
 export function FieldInfo({ field }) {
     return (
         <>
             {field.state.meta.isTouched && !field.state.meta.isValid ? (
-                <em>{field.state.meta.errors.join(',')}</em>
+                <em style={{ color: "red" }}>{field.state.meta.errors.join(',')}</em>
             ) : null}
             {field.state.meta.isValidating ? 'Validating...' : null}
         </>
@@ -19,6 +19,20 @@ export default function Form() {
         defaultValues: {
             firstName: '',
             lastName: '',
+            age: 0,
+        },
+        // If this is omitted, `onDynamic` will not be called
+        validationLogic: revalidateLogic(),
+        validators: {
+            onDynamic: ({ value }) => {
+                if (!value.firstName) {
+                    return { firstName: 'A first name is required' }
+                }
+                if (value.age < 13) {
+                    return { age: 'Way too young' }
+                }
+                return undefined
+            },
         },
         onSubmit: async ({ value }) => {
             // Do something with form data
@@ -109,8 +123,9 @@ export default function Form() {
                                     onChange={(e) => field.handleChange(e.target.valueAsNumber)}
                                 />
                                 {!field.state.meta.isValid && (
-                                    <em role="alert">{field.state.meta.errors.join(', ')}</em>
+                                    <em role="alert" style={{ color: "red" }}>{field.state.meta.errors.join(', ')}</em>
                                 )}
+
                             </>
                         )}
                     </form.Field>
