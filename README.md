@@ -1,6 +1,11 @@
 # Tailwind practice fitness app
 with component library
 
+design on https://www.figma.com/design/Z2ZbrNIsEbfSgXuSOOWER6/Fitness-Mobile-App-UI--Community-?node-id=206-281&p=f&t=N7XzinJsBXsZWfD6-0 
+
+# Practice
+- add storybook https://storybook.js.org/docs/get-started/frameworks/react-vite 
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
