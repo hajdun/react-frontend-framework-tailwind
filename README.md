@@ -5,6 +5,14 @@ design on https://www.figma.com/design/Z2ZbrNIsEbfSgXuSOOWER6/Fitness-Mobile-App
 
 # Practice
 - add storybook https://storybook.js.org/docs/get-started/frameworks/react-vite 
+```
+npm create storybook@latest          
+```
+
+- run storybook
+```
+npm run storybook 
+```
 
 # React + Vite
 
