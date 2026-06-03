@@ -1,9 +1,13 @@
-import * as React from 'react'
-import { createRoot } from 'react-dom/client'
+
 
 import { revalidateLogic, useForm } from '@tanstack/react-form'
 
-export function FieldInfo({ field }) {
+
+type FieldInfoProps = {
+    field: { state: { meta: { isValidating: boolean, isTouched: boolean, isValid: boolean, errors: any[] } } }
+}
+
+export function FieldInfo({ field }: FieldInfoProps) {
     return (
         <>
             {field.state.meta.isTouched && !field.state.meta.isValid ? (

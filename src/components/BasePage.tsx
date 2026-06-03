@@ -1,4 +1,3 @@
-import { useState, useEffect, useMemo } from 'react'
 import { Outlet, NavLink } from 'react-router-dom'
 
 const NAV = [
@@ -19,7 +18,7 @@ function BasePage() {
                         <NavLink
                             key={to}
                             to={to}
-                            end={end}
+                            end={end as boolean}
                             className={({ isActive }) =>
                                 `px-3 py-2 rounded-lg text-sm transition-colors ${isActive
                                     ? 'bg-[oklch(from_var(--color-primary)_l_c_h_/_0.1)] text-primary font-medium'
