@@ -90,7 +90,7 @@ export default function PostWorkout() {
                 calories_burned: caloriesBurned,
                 user_name: "John Doe ",
                 weight: weight,
-                workout_id: `/met/{selectedActivity.id}`,
+                workout_id: selectedActivity?.id,
                 workout_length: exerciseLength / 60,
                 timestamp: (Date.now()).toString(),
                 notes: value.notes

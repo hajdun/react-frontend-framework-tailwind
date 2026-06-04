@@ -64,6 +64,9 @@ export default function Workouts() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
 
+
+
+
     useEffect(() => {
         const load = async () => {
             try {
@@ -89,10 +92,13 @@ export default function Workouts() {
     }, [])
 
     const workoutCards = useMemo<WorkoutCardItem[]>(() => {
-        const activityMap = new Map(activities.map((a) => [a.id, a]))
+
+        console.log(activities)
 
         return workouts.map((workout, index) => {
-            const activity = activityMap.get(workout.workout_id)
+
+            const activity = activities.find(wa => wa.id == workout.workout_id)
+
 
             const type = inferType(activity?.Main)
             const name =
