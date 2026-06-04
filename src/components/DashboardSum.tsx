@@ -25,7 +25,7 @@ export default function DashboardSum() {
                 <StatCard label="Weight" value="68.2" unit="kg" delta={-0.4} deltaLabel="this week" />
             </div>
 
-            <Card>
+            <Card className="print:hidden">
                 <h2 className="text-sm font-semibold text-text mb-4">Recent Workouts</h2>
                 <div className="space-y-2">
                     {RECENT.map((w) => (
@@ -68,22 +68,7 @@ export default function DashboardSum() {
                     </div>
                 </Card>
 
-                <Card>
-                    <h2 className="text-sm font-semibold text-text mb-3">This Week</h2>
-                    <div className="flex items-end gap-1.5 h-20">
-                        {[3, 5, 0, 4, 6, 2, 0].map((val, i) => (
-                            <div key={i} className="flex-1 flex flex-col items-center gap-1">
-                                <div
-                                    className="w-full rounded-sm bg-primary opacity-80 transition-all"
-                                    style={{ height: `${(val / 6) * 100}%`, minHeight: val ? '4px' : '0' }}
-                                />
-                                <span className="text-[10px] text-faint">
-                                    {['M', 'T', 'W', 'T', 'F', 'S', 'S'][i]}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
-                </Card>
+
             </div>
         </div>
     )

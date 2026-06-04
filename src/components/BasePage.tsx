@@ -82,7 +82,7 @@ function DropdownNav({ to, label, submenu }: {
 function BasePage() {
     return (
         <div>
-            <header>
+            <header className="print:hidden">
                 <nav className="flex items-center gap-1">
                     {NAV.map(({ to, label, end, submenu }) =>
                         submenu ? (

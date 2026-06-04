@@ -1,0 +1,18 @@
+/* Show URLs after links in print */
+@media print {
+    a[href^="http"]::after {
+        content: " (" attr(href) ")";
+    }
+
+    /* Force colors and backgrounds to print */
+    .print-keep-colors {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+}
+
+/* Set page size and margins */
+@page {
+    size: A4;
+    margin: 2cm;
+}

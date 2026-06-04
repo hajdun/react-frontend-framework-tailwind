@@ -10,6 +10,7 @@ import Workouts from "./pages/Workouts"
 import PostWorkout from "./pages/PostWorkout"
 import Settings from './pages/Settings'
 import DashBoard from './pages/DashBoard'
+
 const router = createBrowserRouter([
   {
     path: '/',
