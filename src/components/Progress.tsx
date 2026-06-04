@@ -1,5 +1,5 @@
-import Card from '../components/Card.jsx'
-import StatCard from '../components/StatCard.jsx'
+import Card from './Card.jsx'
+import StatCard from './StatCard.jsx'
 
 const WEIGHT_DATA = [69.8, 69.5, 69.2, 68.9, 68.7, 68.5, 68.2]
 const LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']

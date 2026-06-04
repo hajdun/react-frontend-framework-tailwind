@@ -1,4 +1,4 @@
-import { Outlet, NavLink, Link, useLocation } from 'react-router-dom'
+import { Outlet, NavLink, useLocation } from 'react-router-dom'
 import { useState, useRef, useEffect } from 'react'
 
 const NAV = [
@@ -10,7 +10,6 @@ const NAV = [
         ]
     },
     { to: '/nutition', label: 'Nutrition' },
-    { to: '/progress', label: 'Progress' },
     { to: '/settings', label: 'Settings' },
 ]
 
