@@ -10,6 +10,7 @@ import Nutrition from "./pages/Nutrition"
 import Progress from "./pages/Progress"
 import Workouts from "./pages/Workouts"
 import PostWorkout from "./pages/PostWorkout"
+import Settings from './pages/Settings'
 const router = createBrowserRouter([
   {
     path: '/',
@@ -19,7 +20,8 @@ const router = createBrowserRouter([
       { path: '/nutition', element: <Nutrition /> },
       { path: '/progress', element: <Progress /> },
       { path: '/workout', element: <Workouts /> },
-      { path: '/post_workout', element: <PostWorkout /> }
+      { path: '/post_workout', element: <PostWorkout /> },
+      { path: '/settings', element: <Settings /> }
     ]
   },
 ])

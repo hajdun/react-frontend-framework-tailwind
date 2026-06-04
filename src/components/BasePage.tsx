@@ -11,6 +11,7 @@ const NAV = [
     },
     { to: '/nutition', label: 'Nutrition' },
     { to: '/progress', label: 'Progress' },
+    { to: '/settings', label: 'Settings' },
 ]
 
 const activeCls = 'bg-[oklch(from_var(--color-primary)_l_c_h_/_0.1)] text-[var(--color-primary)] font-medium'
