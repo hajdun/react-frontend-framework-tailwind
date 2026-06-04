@@ -97,6 +97,7 @@ export default function PostWorkout() {
             }
 
             const result = await postWorkout(payload)
+            alert(result.message)
             console.log(result)
         },
     })
@@ -215,14 +216,7 @@ export default function PostWorkout() {
                         selector={(state) => [state.canSubmit, state.isSubmitting] as const}
                     >
                         {([canSubmit, isSubmitting]) => (
-                            <div className="flex gap-3 pt-1">
-                                <Button
-                                    type="submit"
-                                    disabled={!canSubmit}
-                                    className="flex-1"
-                                >
-                                    {isSubmitting ? 'Saving…' : 'Save Workout'}
-                                </Button>
+                            <div className="flex gap-3 pt-1 justify-between">
                                 <Button
                                     type="reset"
                                     variant="secondary"
@@ -234,6 +228,14 @@ export default function PostWorkout() {
                                 >
                                     Reset
                                 </Button>
+
+                                <Button
+                                    type="submit"
+                                    variant="secondary"
+                                >
+                                    {isSubmitting ? 'Saving…' : 'Save Workout'}
+                                </Button>
+
                             </div>
                         )}
                     </form.Subscribe>

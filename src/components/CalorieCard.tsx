@@ -38,7 +38,7 @@ export default function CalorieCard({
             {/* Header */}
             <div className="bg-[var(--color-primary)] px-5 py-3 flex items-center gap-2">
                 <span className="text-lg">🔥</span>
-                <h2 className="text-sm font-semibold text-white">Calories Burned</h2>
+                <h2 className="text-sm font-semibold">Calories Burned</h2>
             </div>
 
             {/* Big number */}

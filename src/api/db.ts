@@ -33,6 +33,17 @@ export const fetchActivities = async () => {
 };
 
 
+export const fetchWorkouts = async () => {
+    const querySnapshot = await getDocs(collection(db, "workoutz"));
+    const workouts = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+    }));
+    return workouts;
+};
+
+
+
 export const postWorkout = async (workout: Workout) => {
     try {
         await addDoc(collection(db, 'workoutz'), workout)
