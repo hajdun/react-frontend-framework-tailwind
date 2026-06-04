@@ -83,9 +83,9 @@ export default function Settings() {
                 if (
                     value.bodyWeight > 0 &&
                     value.preferredLiftWeight > 0 &&
-                    value.preferredLiftWeight > value.bodyWeight
+                    value.preferredLiftWeight >= (value.bodyWeight)
                 ) {
-                    errors.bodyWeight = 'Body weight must be at least as high as lifted weight'
+                    errors.bodyWeight = 'Body weight must be higher than lifted weight'
                     errors.preferredLiftWeight = 'Lifted weight cannot exceed body weight'
                 }
 
@@ -241,7 +241,7 @@ export default function Settings() {
                     >
                         {([canSubmit, isSubmitting, values]) => {
                             const invalidWeightRelation =
-                                values.preferredLiftWeight > values.bodyWeight
+                                values.preferredLiftWeight >= values.bodyWeight
 
                             return (
                                 <div className="space-y-4">
@@ -265,9 +265,12 @@ export default function Settings() {
                                         </div>
 
                                         {invalidWeightRelation && (
-                                            <p className="mt-3 text-sm text-[var(--color-error)]">
-                                                Weight lifted cannot be higher than body weight.
-                                            </p>
+                                            <div>
+                                                <h2>Issues</h2>
+                                                <p className="mt-3 text-sm text-red">
+                                                    Weight lifted cannot be higher than body weight.
+                                                </p>
+                                            </div>
                                         )}
                                     </div>
 
