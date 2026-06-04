@@ -1,9 +1,8 @@
 import { revalidateLogic, useForm } from '@tanstack/react-form'
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
-import { db } from '../firebase'
 import Button from '../components/Button'
 import { useEffect, useState } from 'react'
-import { fetchActivities, type Activity } from '../api/db'
+import { fetchActivities, postWorkout, type Activity } from '../api/db'
+import CalorieCard, { calculateBurnedCalories } from '../components/CalorieCard'
 
 // --- Types ---
 
@@ -54,71 +53,11 @@ export function FieldInfo({ field }: FieldInfoProps) {
     )
 }
 
-// --- Calorie Result Card ---
 
-function CalorieCard({
-    activity,
-    durationMins,
-    weightKg = 90,
-}: {
-    activity: Activity | null
-    durationMins: number
-    weightKg?: number
-}) {
-    if (!activity || !durationMins) {
-        return (
-            <div className="mt-6 rounded-xl border border-dashed border-[var(--color-border)] bg-[var(--color-surface)] p-5 text-center">
-                <div className="text-3xl mb-2">🔥</div>
-                <p className="text-sm text-[var(--color-text-muted)]">
-                    Select an activity and enter duration to see calories burned
-                </p>
-            </div>
-        )
-    }
-
-    const hours = durationMins / 60
-    const calories = Math.round(activity.MET * weightKg * hours)
-
-    return (
-        <div className="mt-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] overflow-hidden">
-            {/* Header */}
-            <div className="bg-[var(--color-primary)] px-5 py-3 flex items-center gap-2">
-                <span className="text-lg">🔥</span>
-                <h2 className="text-sm font-semibold text-white">Calories Burned</h2>
-            </div>
-
-            {/* Big number */}
-            <div className="px-5 py-4 flex items-end gap-1">
-                <span className="text-4xl font-bold text-[var(--color-text)] tabular-nums">
-                    {calories}
-                </span>
-                <span className="text-sm text-[var(--color-text-muted)] mb-1">kcal (   MET × Weight (kg) × Time (h))</span>
-            </div>
-
-            {/* Breakdown */}
-            <div className="border-t border-[var(--color-border)] px-5 py-3 grid grid-cols-3 gap-3 text-center">
-                {[
-                    { label: 'MET', value: activity.MET },
-                    { label: 'Weight', value: `${weightKg} kg` },
-                    { label: 'Duration', value: `${hours.toFixed(2)} h` },
-                ].map(({ label, value }) => (
-                    <div key={label} className="flex flex-col">
-                        <span className="text-xs text-[var(--color-text-muted)]">{label}</span>
-                        <span className="text-sm font-semibold text-[var(--color-text)] tabular-nums">
-                            {value}
-                        </span>
-                    </div>
-                ))}
-            </div>
-
-
-        </div>
-    )
-}
 
 // --- Form ---
 
-export default function AddWorkoutForm() {
+export default function PostWorkout() {
     const [activityList, setActivityList] = useState<Activity[]>([])
     const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null)
 
@@ -136,16 +75,29 @@ export default function AddWorkoutForm() {
         validationLogic: revalidateLogic(),
         validators: {
             onDynamic: ({ value }) => {
-                if (!value.exerciseName) return { exerciseName: 'Exercise name is required' }
+                if (!selectedActivity) return { exerciseName: 'Exercise name is required' }
                 if (value.exerciseLengthMins < 10) return { exerciseLengthMins: 'Must be at least 10 minutes' }
                 return undefined
             },
         },
         onSubmit: async ({ value }) => {
-            await addDoc(collection(db, 'workouts'), {
-                ...value,
-                createdAt: serverTimestamp(),
-            })
+            console.log(value)
+            const weight = 90
+            const exerciseLength = value.exerciseLengthMins
+            const caloriesBurned = calculateBurnedCalories(selectedActivity?.MET, weight, exerciseLength)
+
+            const payload = {
+                calories_burned: caloriesBurned,
+                user_name: "John Doe ",
+                weight: weight,
+                workout_id: `/met/{selectedActivity.id}`,
+                workout_length: exerciseLength / 60,
+                timestamp: (Date.now()).toString(),
+                notes: value.notes
+            }
+
+            const result = await postWorkout(payload)
+            console.log(result)
         },
     })
 
@@ -251,7 +203,7 @@ export default function AddWorkoutForm() {
                                     value={field.state.value}
                                     onBlur={field.handleBlur}
                                     onChange={(e) => field.handleChange(e.target.value)}
-                                    placeholder="How did it feel? Any PRs?"
+                                    placeholder="How did it feel?"
                                     className={`${inputClass} resize-none`}
                                 />
                             </div>

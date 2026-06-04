@@ -5,7 +5,7 @@ const NAV = [
     { to: '/workout', label: 'Workouts' },
     { to: '/nutition', label: 'Nutrition' },
     { to: '/progress', label: 'Progress' },
-    { to: '/form', label: 'Form' },
+    { to: '/post_workout', label: 'Post Your Workout' },
 ]
 
 function BasePage() {
