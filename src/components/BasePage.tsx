@@ -11,6 +11,7 @@ const NAV = [
     },
     { to: '/nutition', label: 'Nutrition' },
     { to: '/settings', label: 'Settings' },
+    { to: '/activity_admin', label: 'Manage Actvities' }
 ]
 
 const activeCls = 'bg-[oklch(from_var(--color-primary)_l_c_h_/_0.1)] text-[var(--color-primary)] font-medium'

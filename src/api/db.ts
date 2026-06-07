@@ -1,4 +1,4 @@
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, writeBatch } from "firebase/firestore";
 import { db } from "../firebase"; // your initialized Firestore instance
 
 
@@ -8,6 +8,8 @@ export type Activity = {
     Main: string,
     ActivityDesc: string
 }
+
+export type ActivityDraft = Omit<Activity, 'id'>
 
 export type Workout = {
     user_name: string,
@@ -32,6 +34,14 @@ export const fetchActivities = async () => {
     return activities;
 };
 
+export const postActivity = async (activity: ActivityDraft) => {
+    try {
+        await addDoc(collection(db, 'met'), activity)
+        return { success: true, message: "Activity saved to database" }
+    } catch (err) {
+        return { success: false, message: "Failed to save activity to database. Please try again later" }
+    }
+};
 
 export const fetchWorkouts = async () => {
     const querySnapshot = await getDocs(collection(db, "workoutz"));
@@ -50,5 +60,33 @@ export const postWorkout = async (workout: Workout) => {
         return { success: true, message: "Workout saved to database" }
     } catch (err) {
         return { success: false, message: "Failed to save workout to database. Please try again later" }
+    }
+}
+
+
+
+
+export const handleSave = async (id: string, drafts: string[]) => {
+    const draft = drafts[id]
+    if (!draft) return
+}
+
+export const handleDelete = async (id: string) => {
+
+    try {
+        await deleteDoc(doc(db, 'met', id))
+    } catch (e) {
+        console.log(e instanceof Error ? e.message : 'Delete failed.', 'error')
+    }
+}
+
+export const handleDeleteSelected = async (selectedIds: string[]) => {
+    if (!selectedIds.length) return
+    try {
+        const batch = writeBatch(db)
+        selectedIds.forEach(id => batch.delete(doc(db, 'met', id)))
+        await batch.commit()
+    } catch (e) {
+        console.log(e instanceof Error ? e.message : 'Bulk delete failed.', 'error')
     }
 }
