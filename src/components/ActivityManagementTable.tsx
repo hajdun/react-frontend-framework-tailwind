@@ -12,7 +12,7 @@ import Button from "../components/Button";
 type ActivityManagementTableProps = {
     displayedActivities: Activity[];
     postActivity: (activity: ActivityDraft) => Promise<{ message?: string } | void>;
-    deleteActivity?: (id: string) => void | Promise<void>;
+    deleteActivity?: () => void | Promise<void>;
 };
 
 type ActivityRow = Activity & {
@@ -26,10 +26,6 @@ function parseMetInput(value: string) {
     return Number.isNaN(parsed) ? 0 : parsed;
 }
 
-function formatMet(value: number) {
-    if (!value) return "";
-    return Number(value).toString().replace(".", ",");
-}
 
 export default function ActivityManagementTable({
     displayedActivities,
@@ -42,23 +38,6 @@ export default function ActivityManagementTable({
         setRows(displayedActivities);
     }, [displayedActivities]);
 
-    const updateRow = <K extends keyof ActivityDraft>(
-        rowId: string,
-        key: K,
-        value: ActivityDraft[K]
-    ) => {
-        setRows((prev) =>
-            prev.map((row) =>
-                row.id === rowId
-                    ? {
-                        ...row,
-                        [key]: value,
-                        isDirty: true,
-                    }
-                    : row
-            )
-        );
-    };
 
     const columns = useMemo<ColumnDef<ActivityRow>[]>(
         () => [
@@ -85,7 +64,7 @@ export default function ActivityManagementTable({
                     <input
                         type="text"
                         value={getValue()}
-                        onChange={(e) => updateRow(row.original.id, "Main", e.target.value)}
+                        onChange={(e) => console.log(row.original.id, "Main", e.target.value)}
                         className="w-full rounded-[16px] border border-[#EAE7E7] bg-white px-4 py-3 text-sm font-medium text-[#1D1617] outline-none transition focus:border-[#7B61FF]"
                     />
                 ),
@@ -98,7 +77,7 @@ export default function ActivityManagementTable({
                         type="text"
                         value={getValue()}
                         onChange={(e) =>
-                            updateRow(row.original.id, "ActivityDesc", e.target.value)
+                            console.log(row.original.id, "ActivityDesc", e.target.value)
                         }
                         className="w-full rounded-[16px] border border-[#EAE7E7] bg-white px-4 py-3 text-sm font-medium text-[#1D1617] outline-none transition focus:border-[#7B61FF]"
                     />
@@ -118,7 +97,7 @@ export default function ActivityManagementTable({
                                 variant="danger"
                                 size="sm"
                                 className="min-w-[88px]"
-                                onClick={() => deleteActivity?.(id)}
+                                onClick={deleteActivity}
                             >
                                 Delete
                             </Button>

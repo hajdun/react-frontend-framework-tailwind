@@ -131,7 +131,7 @@ export default function ActivitiesAdmin() {
                 </div>}
 
                 {displayedActivities.length && (
-                    <ActivityManagementTable displayedActivities={displayedActivities} postActivity={postActivity} />
+                    <ActivityManagementTable displayedActivities={displayedActivities} postActivity={postActivity} deleteActivity={() => { }} />
                 )}
             </section>
         </div>
