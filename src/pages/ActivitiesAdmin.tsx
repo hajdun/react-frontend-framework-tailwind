@@ -113,10 +113,12 @@ export default function ActivitiesAdmin() {
                         <code className="rounded bg-[var(--color-surface-offset)] px-1 py-0.5 text-xs">Activity Description</code>.
                     </p>
                     <div >
-                        <label className={`w-full`}>
-                            Import CSV
-                            <input ref={fileRef} type="file" accept=".csv,text/csv" className="hidden" onChange={handleImport} />
-                        </label>
+                        <Button>
+                            <label className={`w-full`}>
+                                Import CSV
+                                <input ref={fileRef} type="file" accept=".csv,text/csv" className="hidden" onChange={handleImport} />
+                            </label>
+                        </Button>
                         <Button type="button" onClick={handleExport} disabled={!activities.length}>
                             Export visible rows
                         </Button>

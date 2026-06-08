@@ -1,24 +1,28 @@
-/** @type {import('tailwindcss').Config} */
+// tailwind.config.ts
 export default {
-    content: [
-        "./index.html",
-        "./src/**/*.{js,ts,jsx,tsx}",
-    ],
     theme: {
         extend: {
-            fontFamily: {
-                sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            colors: {
+                primary: {
+                    DEFAULT: "#7B61FF",
+                    hover: "#6B51EF",
+                    light: "#C084FC",
+                    surface: "#F3F0FF",
+                },
             },
-            animation: {
-                'fade-in': 'fadeIn 0.5s ease-in-out',
+            borderRadius: {
+                "2xl": "1rem",
+                "3xl": "1.5rem",
+                "4xl": "2rem",
             },
-            keyframes: {
-                fadeIn: {
-                    '0%': { opacity: '0', transform: 'translateY(10px)' },
-                    '100%': { opacity: '1', transform: 'translateY(0)' },
-                }
-            }
+            boxShadow: {
+                "purple-glow": "0 8px 32px rgba(123, 97, 255, 0.3)",
+                "card": "0 4px 20px rgba(0, 0, 0, 0.06)",
+            },
+            backgroundImage: {
+                "primary-gradient": "linear-gradient(135deg, #7B61FF 0%, #C084FC 100%)",
+                "card-gradient": "linear-gradient(135deg, #A78BFA 0%, #7C3AED 100%)",
+            },
         },
     },
-
-}
+};
