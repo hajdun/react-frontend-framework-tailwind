@@ -35,8 +35,12 @@ export const fetchActivities = async () => {
 };
 
 export const postActivity = async (activity: ActivityDraft) => {
+    const parsedActivity = {
+        ...activity,
+        MET: parseFloat(activity.MET + "")
+    }
     try {
-        await addDoc(collection(db, 'met'), activity)
+        await addDoc(collection(db, 'met'), parsedActivity)
         return { success: true, message: "Activity saved to database" }
     } catch (err) {
         return { success: false, message: "Failed to save activity to database. Please try again later" }
@@ -54,6 +58,7 @@ export const fetchWorkouts = async () => {
 
 
 export const postWorkout = async (workout: Workout) => {
+
     try {
         await addDoc(collection(db, 'workoutz'), workout)
         return { success: true, message: "Workout saved to database" }

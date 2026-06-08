@@ -102,6 +102,17 @@ export default function Workouts() {
                 activity?.Main ||
                 `Workout ${index + 1}`;
 
+            const baseDate = new Date(parseInt(workout.timestamp))
+
+            const displayDate = new Intl.DateTimeFormat("en-GB", {
+                weekday: "long",
+                year: "numeric",
+                month: "short",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+            }).format(baseDate)
+
             return {
                 id: workout.timestamp || `${workout.workout_id}-${index}`,
                 name,
@@ -109,8 +120,9 @@ export default function Workouts() {
                 duration: formatDuration(workout.workout_length),
                 cal: Math.round(workout.calories_burned),
                 exercises: 1,
-                notes: "It was: " + workout.notes,
+                notes: `${workout?.notes}`,
                 timestamp: workout.timestamp,
+                displayDate: displayDate,
                 userName: workout.user_name,
             };
         });
@@ -324,7 +336,7 @@ export default function Workouts() {
                                         className={`text-xs font-medium ${isFeatured ? "text-white/75" : "text-[#ADA4A5]"
                                             }`}
                                     >
-                                        {w.timestamp || "Recent"}
+                                        {w.displayDate || "Recent"}
                                     </span>
 
                                     <button
