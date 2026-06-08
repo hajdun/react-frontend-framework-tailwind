@@ -1,132 +1,210 @@
-
+import { useMemo, useState } from "react";
 import {
-    type Activity,
-    type ActivityDraft,
-} from "../api/db";
+    createColumnHelper,
+    flexRender,
+    getCoreRowModel,
+    useReactTable,
+    type ColumnDef,
+} from "@tanstack/react-table";
+import type { Activity, ActivityDraft } from "../api/db";
 import Button from "../components/Button";
 
 type ActivityManagementTableProps = {
-    displayedActivities: Array<Activity>
-    postActivity: (activity: ActivityDraft) => any
+    displayedActivities: Activity[];
+    postActivity: (activity: ActivityDraft) => Promise<{ message?: string } | void>;
+    deleteActivity?: (id: string) => void | Promise<void>;
+};
+
+type ActivityRow = Activity & {
+    isDirty?: boolean;
+};
+
+const columnHelper = createColumnHelper<ActivityRow>();
+
+function parseMetInput(value: string) {
+    const parsed = Number(value.replace(",", "."));
+    return Number.isNaN(parsed) ? 0 : parsed;
 }
 
-export default function ActivityManagementTable({ displayedActivities, postActivity }: ActivityManagementTableProps) {
+function formatMet(value: number) {
+    if (!value) return "";
+    return Number(value).toString().replace(".", ",");
+}
+
+export default function ActivityManagementTable({
+    displayedActivities,
+    postActivity,
+    deleteActivity,
+}: ActivityManagementTableProps) {
+    const [rows, setRows] = useState<ActivityRow[]>(displayedActivities);
+
+    useMemo(() => {
+        setRows(displayedActivities);
+    }, [displayedActivities]);
+
+    const updateRow = <K extends keyof ActivityDraft>(
+        rowId: string,
+        key: K,
+        value: ActivityDraft[K]
+    ) => {
+        setRows((prev) =>
+            prev.map((row) =>
+                row.id === rowId
+                    ? {
+                        ...row,
+                        [key]: value,
+                        isDirty: true,
+                    }
+                    : row
+            )
+        );
+    };
+
+    const columns = useMemo<ColumnDef<ActivityRow>[]>(
+        () => [
+            columnHelper.accessor("MET", {
+                header: () => "MET",
+                cell: ({ row, getValue }) => (
+                    <input
+                        type="text"
+                        inputMode="decimal"
+                        value={
+                            !getValue()
+                                ? ""
+                                : parseFloat(getValue() + "").toPrecision(3)
+                        }
+                        onChange={(e) => console.log(row.original.id, "MET", parseMetInput(e.target.value))}
+                        className="w-24 rounded-full border border-[#EAE7E7] bg-[#EEE9FF] px-4 py-2 text-sm font-semibold text-[#7B61FF] outline-none transition focus:border-[#7B61FF] focus:bg-white"
+                    />
+                ),
+            }),
+
+            columnHelper.accessor("Main", {
+                header: () => "Main heading",
+                cell: ({ row, getValue }) => (
+                    <input
+                        type="text"
+                        value={getValue()}
+                        onChange={(e) => updateRow(row.original.id, "Main", e.target.value)}
+                        className="w-full rounded-[16px] border border-[#EAE7E7] bg-white px-4 py-3 text-sm font-medium text-[#1D1617] outline-none transition focus:border-[#7B61FF]"
+                    />
+                ),
+            }),
+
+            columnHelper.accessor("ActivityDesc", {
+                header: () => "Activity description",
+                cell: ({ row, getValue }) => (
+                    <input
+                        type="text"
+                        value={getValue()}
+                        onChange={(e) =>
+                            updateRow(row.original.id, "ActivityDesc", e.target.value)
+                        }
+                        className="w-full rounded-[16px] border border-[#EAE7E7] bg-white px-4 py-3 text-sm font-medium text-[#1D1617] outline-none transition focus:border-[#7B61FF]"
+                    />
+                ),
+            }),
+
+            columnHelper.display({
+                id: "actions",
+                header: () => "Actions",
+                cell: ({ row }) => {
+                    const { id, MET, Main, ActivityDesc, isDirty } = row.original;
+
+                    return (
+                        <div className="flex flex-wrap gap-2">
+                            <Button
+                                type="button"
+                                variant="danger"
+                                size="sm"
+                                className="min-w-[88px]"
+                                onClick={() => deleteActivity?.(id)}
+                            >
+                                Delete
+                            </Button>
+
+                            <Button
+                                type="button"
+                                variant="primary"
+                                size="sm"
+                                className="min-w-[88px]"
+                                disabled={!isDirty}
+                                onClick={async () => {
+                                    const result = await postActivity({
+                                        MET,
+                                        Main,
+                                        ActivityDesc,
+                                    });
+
+                                    setRows((prev) =>
+                                        prev.map((item) =>
+                                            item.id === id ? { ...item, isDirty: false } : item
+                                        )
+                                    );
+
+                                    if (result?.message) alert(result.message);
+                                }}
+                            >
+                                Save
+                            </Button>
+                        </div>
+                    );
+                },
+            }),
+        ],
+        [deleteActivity, postActivity]
+    );
+
+    const table = useReactTable({
+        data: rows,
+        columns,
+        getCoreRowModel: getCoreRowModel(),
+    });
 
     return (
-        <div className="overflow-x-auto rounded-[20px] border border-[#F1F1F1] bg-[#FCFCFC]">
-            <table className="min-w-full border-separate border-spacing-0">
-                <thead>
-                    <tr className="bg-[#F7F8F8] text-left">
-                        <th className="px-4 py-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#ADA4A5]">
-                            MET
-                        </th>
-                        <th className="px-4 py-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#ADA4A5]">
-                            Main heading
-                        </th>
-                        <th className="px-4 py-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#ADA4A5]">
-                            Activity description
-                        </th>
-                        <th className="rounded-tr-[20px] px-4 py-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#ADA4A5]">
-                            Actions
-                        </th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {displayedActivities.map((activity, index) => {
-                        const draftId = `${activity.Main}-${index}`;
-                        const draft = {
-                            MET: activity.MET,
-                            Main: activity.Main,
-                            ActivityDesc: activity.ActivityDesc,
-                        };
-
-                        return (
-                            <tr
-                                key={draftId}
-                                className="align-top transition-colors hover:bg-white"
-                            >
-
-                                <td className="border-t border-[#F1F1F1] px-4 py-4">
-                                    <input
-
-                                        type="text"
-                                        inputMode="decimal"
-                                        value={
-                                            !draft.MET
-                                                ? ""
-                                                : parseFloat(draft.MET + "").toPrecision(3)
-                                        }
-                                        onChange={(e) =>
-                                            console.log(
-                                                draftId,
-                                                "MET",
-                                                Number(e.target.value.replace(",", "."))
-                                            )
-                                        }
-
-
-                                        className="w-24 rounded-full border border-[#EAE7E7] bg-[#EEE9FF] px-4 py-2 text-sm font-semibold text-[#7B61FF] outline-none transition focus:border-[#7B61FF] focus:bg-white"
-                                    />
-                                </td>
-
-                                <td className="border-t border-[#F1F1F1] px-4 py-4">
-                                    <input
-                                        type="text"
-                                        value={draft.Main}
-                                        onChange={(e) =>
-                                            console.log(draftId, "Main", e.target.value)
-                                        }
-                                        className="w-full rounded-[16px] border border-[#EAE7E7] bg-white px-4 py-3 text-sm font-medium text-[#1D1617] outline-none transition focus:border-[#7B61FF]"
-                                    />
-                                </td>
-
-                                <td className="border-t border-[#F1F1F1] px-4 py-4">
-                                    <input
-                                        type="text"
-                                        value={draft.ActivityDesc}
-                                        onChange={(e) =>
-                                            console.log(draftId, "ActivityDesc", e.target.value)
-                                        }
-                                        className="w-full rounded-[16px] border border-[#EAE7E7] bg-white px-4 py-3 text-sm font-medium text-[#1D1617] outline-none transition focus:border-[#7B61FF]"
-                                    />
-                                </td>
-
-                                <td className="border-t border-[#F1F1F1] px-4 py-4">
-                                    <div className="flex flex-wrap gap-2">
-                                        <Button
-                                            type="button"
-                                            variant="danger"
-                                            size="sm"
-                                            className="min-w-[88px]"
-                                            onClick={() => console.log(activity.id)}
-                                        >
-                                            Delete
-                                        </Button>
-
-                                        <Button
-                                            type="button"
-                                            variant="primary"
-                                            size="sm"
-                                            className="min-w-[88px]"
-                                            onClick={async () => {
-                                                const result = await postActivity({
-                                                    ...activity,
-                                                    ...draft,
-                                                });
-                                                alert(result?.message);
-                                            }}
-                                        >
-                                            Save
-                                        </Button>
-                                    </div>
-                                </td>
+        <div className="overflow-hidden rounded-[24px] border border-[#F1F1F1] bg-[#FCFCFC] shadow-[0_12px_30px_rgba(29,22,23,0.04)]">
+            <div className="overflow-x-auto">
+                <table className="min-w-full border-separate border-spacing-0">
+                    <thead>
+                        {table.getHeaderGroups().map((headerGroup) => (
+                            <tr key={headerGroup.id} className="bg-[#F7F8F8] text-left">
+                                {headerGroup.headers.map((header, index) => (
+                                    <th
+                                        key={header.id}
+                                        className={`px-4 py-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#ADA4A5] ${index === headerGroup.headers.length - 1 ? "rounded-tr-[24px]" : ""
+                                            } ${index === 0 ? "rounded-tl-[24px]" : ""}`}
+                                    >
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(
+                                                header.column.columnDef.header,
+                                                header.getContext()
+                                            )}
+                                    </th>
+                                ))}
                             </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
-        </div>
+                        ))}
+                    </thead>
 
+                    <tbody>
+                        {table.getRowModel().rows.map((row) => (
+                            <tr
+                                key={row.id}
+                                className="align-top transition-colors hover:bg-white/80"
+                            >
+                                {row.getVisibleCells().map((cell) => (
+                                    <td
+                                        key={cell.id}
+                                        className="border-t border-[#F1F1F1] px-4 py-4"
+                                    >
+                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     );
 }
