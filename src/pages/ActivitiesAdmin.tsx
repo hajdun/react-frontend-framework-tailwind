@@ -7,7 +7,7 @@ import {
 } from "../api/db";
 import Button from "../components/Button";
 import StatCard from "../components/StatCard";
-import ActivityManagementTable from "../components/ActivityManagementTable";
+import ActivityManagementTable from "../components/infiniteScrollTable/ActivityManagementTable";
 
 
 export default function ActivitiesAdmin() {

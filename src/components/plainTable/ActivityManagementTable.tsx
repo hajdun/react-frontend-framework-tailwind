@@ -6,8 +6,8 @@ import {
     useReactTable,
     type ColumnDef,
 } from "@tanstack/react-table";
-import type { Activity, ActivityDraft } from "../api/db";
-import Button from "../components/Button";
+import type { Activity, ActivityDraft } from "../../api/db";
+import Button from "../../components/Button";
 
 type ActivityManagementTableProps = {
     displayedActivities: Activity[];
