@@ -55,7 +55,7 @@ export default function PostWorkout() {
     const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
 
     useEffect(() => {
-        fetchActivities().then(setActivityList);
+        fetchActivities().then((list) => setActivityList(list));
     }, []);
 
     const form = useForm<WorkoutFormValues>({
