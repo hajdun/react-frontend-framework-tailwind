@@ -28,6 +28,8 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  --shadow-card: 0 8px 30px rgba(29, 22, 23, 0.06);
+
   @media (max-width: 1024px) {
     font-size: 16px;
   }
