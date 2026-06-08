@@ -53,40 +53,11 @@ export const fetchWorkouts = async () => {
 };
 
 
-
 export const postWorkout = async (workout: Workout) => {
     try {
         await addDoc(collection(db, 'workoutz'), workout)
         return { success: true, message: "Workout saved to database" }
     } catch (err) {
         return { success: false, message: "Failed to save workout to database. Please try again later" }
-    }
-}
-
-
-
-
-export const handleSave = async (id: string, drafts: string[]) => {
-    const draft = drafts[id]
-    if (!draft) return
-}
-
-export const handleDelete = async (id: string) => {
-
-    try {
-        await deleteDoc(doc(db, 'met', id))
-    } catch (e) {
-        console.log(e instanceof Error ? e.message : 'Delete failed.', 'error')
-    }
-}
-
-export const handleDeleteSelected = async (selectedIds: string[]) => {
-    if (!selectedIds.length) return
-    try {
-        const batch = writeBatch(db)
-        selectedIds.forEach(id => batch.delete(doc(db, 'met', id)))
-        await batch.commit()
-    } catch (e) {
-        console.log(e instanceof Error ? e.message : 'Bulk delete failed.', 'error')
     }
 }

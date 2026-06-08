@@ -259,7 +259,7 @@ export default function PostWorkout() {
                                                 form.reset();
                                                 setSelectedActivity(null);
                                             }}
-                                            className="sm:min-w-[150px]"
+                                            className="md:w-30 sm:min-w-[150px]"
                                         >
                                             Reset
                                         </Button>

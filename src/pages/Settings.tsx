@@ -403,7 +403,7 @@ export default function Settings() {
                                         type="button"
                                         variant="secondary"
                                         onClick={() => form.reset()}
-                                        className="sm:min-w-[160px]"
+                                        className="md:w-40 sm:min-w-[160px]"
                                     >
                                         Reset
                                     </Button>

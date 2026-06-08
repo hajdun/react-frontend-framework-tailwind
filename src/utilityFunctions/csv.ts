@@ -1,38 +1,36 @@
 import Papa from 'papaparse';
 
 
-import type { Activity, ActivityDraft } from "../api/db"
-
-
-
-
-
-
-export function toCsv(rows: Activity[]): string {
-    const escape = (v: unknown) => {
-        const s = String(v ?? '')
-        return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s
-    }
-    return [['id', 'MET', 'Main', 'ActivityDesc'], ...rows.map(r => [r.id, r.MET, r.Main, r.ActivityDesc])]
-        .map(row => row.map(escape).join(','))
-        .join('\n')
-}
-
-
-
 
 export function parseCsv(file: any) {
 
     const result = Papa.parse(file, { delimiter: ";" });
     const resultData = result.data
 
-    const parsedResult = (resultData || []).map((rd: string[]) => {
+    const parsedResult = (resultData || []).map((rd: unknown) => {
         return {
-            Main: rd[0], MET: rd[1], ActivityDesc: rd[2]
+            Main: rd[0], MET: rd[1]?.toString().replace(".", ","), ActivityDesc: rd[2]
         }
     }
     )
-
     return parsedResult
 }
 
+
+export function createCsv(data: any, fileName = "data.csv") {
+    const csv = Papa.unparse(data, {
+        delimiter: ";",
+    });
+    const bom = "\uFEFF";
+    const blob = new Blob([bom, csv], { type: "text/csv;charset=utf-8;" });
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    window.URL.revokeObjectURL(url);
+}
