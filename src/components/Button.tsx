@@ -1,11 +1,15 @@
 import { type ButtonHTMLAttributes } from "react";
 
+const commonProps = "rounded cursor-pointer"
+
 const variants = {
-    primary: "bg-primary hover:bg-primary-hover",
+    primary: `bg-primary hover:bg-primary-hover ${commonProps}`,
     secondary:
-        "bg-[var(--color-surface-offset)] hover:bg-[var(--color-divider)] text-text border border-[var(--color-border)]",
+        `bg-[var(--color-surface-offset)] hover:bg-[var(--color-divider)] text-text border border-[var(--color-border)] ${commonProps}`,
     ghost:
-        "hover:bg-[var(--color-surface-offset)] text-muted hover:text-text",
+        `hover:bg-[var(--color-surface-offset)] text-muted hover:text-text ${commonProps}`,
+    danger: `bg-red-500 px-3 py-1 text-xs text-white hover:bg-red-300 ${commonProps}`,
+    continue: `bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-400 ${commonProps}`,
 } as const;
 
 const sizes = {

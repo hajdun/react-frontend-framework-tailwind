@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { parseCsv, toCsv } from '../utilityFunctions/csv'
 import { fetchActivities, postActivity, type Activity, type ActivityDraft } from '../api/db';
 import Button from '../components/Button';
+import StatCard from '../components/StatCard';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -10,17 +11,6 @@ import Button from '../components/Button';
 type DraftMap = Record<string, ActivityDraft>
 
 
-
-// ─── Sub-components ───────────────────────────────────────────────────────────
-
-function StatCard({ label, value }: { label: string; value: number }) {
-    return (
-        <div className="flex flex-col items-center rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-offset)] px-5 py-4">
-            <span className="text-2xl font-bold tabular-nums text-[var(--color-text)]">{value}</span>
-            <span className="text-xs text-[var(--color-text-muted)]">{label}</span>
-        </div>
-    )
-}
 
 
 
@@ -143,8 +133,8 @@ export default function ActivitiesAdmin() {
 
                 </div>
 
-                {/* Right: stats + table */}
-                <div >
+
+                {activities.length > 0 && <div >
 
                     <div className="grid grid-cols-3 gap-4">
                         <StatCard label="Total rows" value={activities.length} />
@@ -164,27 +154,28 @@ export default function ActivitiesAdmin() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {activities.length ? activities.map(activity => {
-                                    const draft = drafts[activity.id] ?? { MET: activity.MET, Main: activity.Main, ActivityDesc: activity.ActivityDesc }
+                                {activities.length ? activities.map((activity, index) => {
+                                    const draft = { MET: activity.MET, Main: activity.Main, ActivityDesc: activity.ActivityDesc }
+                                    const draftId = `${activity.Main}-${index}`
                                     return (
-                                        <tr key={activity.id} className="border-b border-gray-200 align-top">
+                                        <tr key={draftId} className="border-b border-gray-200 align-top">
                                             <td className="px-3 py-2">
-                                                <input type="checkbox" checked={selectedIds.has(activity.id)} onChange={e => toggleOne(activity.id, e.target.checked)} className="h-4 w-4" />
+                                                <input type="checkbox" checked={selectedIds.has(draftId)} onChange={e => toggleOne(draftId, e.target.checked)} className="h-4 w-4" />
                                             </td>
 
                                             <td className="px-3 py-2">
-                                                <input type="number" step="0.1" value={draft.MET} onChange={e => updateDraft(activity.id, 'MET', Number(e.target.value))} className="w-20 border border-gray-300 rounded px-2 py-1 text-sm" />
+                                                <input type="number" step="0.1" value={draft.MET} onChange={e => updateDraft(draftId, 'MET', Number(e.target.value))} className="w-20 border border-gray-300 rounded px-2 py-1 text-sm" />
                                             </td>
                                             <td className="px-3 py-2">
-                                                <input type="text" value={draft.Main} onChange={e => updateDraft(activity.id, 'Main', e.target.value)} className="w-full border border-gray-300 rounded px-2 py-1 text-sm" />
+                                                <input type="text" value={draft.Main} onChange={e => updateDraft(draftId, 'Main', e.target.value)} className="w-full border border-gray-300 rounded px-2 py-1 text-sm" />
                                             </td>
                                             <td className="px-3 py-2">
                                                 <input type="text" value={draft.ActivityDesc} onChange={e => updateDraft(activity.id, 'ActivityDesc', e.target.value)} className="w-full border border-gray-300 rounded px-2 py-1 text-sm" />
                                             </td>
                                             <td className="px-3 py-2">
                                                 <div className="flex gap-2">
-                                                    <button type="button" onClick={() => { const result = postActivity(activity); alert(result?.message) }} className="rounded bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700">Save</button>
-                                                    <button type="button" onClick={() => console.log(activity.id)} className="rounded bg-red-500 px-3 py-1 text-xs text-white hover:bg-red-600">Delete</button>
+                                                    <Button type="button" variant="danger" className="w-20" onClick={() => console.log(activity.id)} >Delete</Button>
+                                                    <Button type="button" variant="continue" className="w-20" onClick={() => { const result = postActivity(activity); alert(result?.message) }} >Save</Button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -201,7 +192,7 @@ export default function ActivitiesAdmin() {
 
                     </>
 
-                </div>
+                </div>}
             </div>
         </div >
     )

@@ -2,10 +2,10 @@ import Card from "./Card";
 
 type StatCardProps = {
     label: string;
-    value: string;
-    unit: string;
-    delta: number;
-    deltaLabel: string;
+    value: string | number;
+    unit?: string;
+    delta?: number;
+    deltaLabel?: string;
     icon?: ReactNode;
 };
 
@@ -14,10 +14,10 @@ import type { ReactNode } from "react";
 export default function StatCard({
     label,
     value,
-    unit,
-    delta,
-    deltaLabel,
-    icon,
+    unit = "",
+    delta = 0,
+    deltaLabel = "",
+    icon = undefined,
 }: StatCardProps) {
     const positive = delta > 0;
     const neutral = delta === 0;
