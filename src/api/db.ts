@@ -12,6 +12,7 @@ export type Activity = {
 export type ActivityDraft = Omit<Activity, 'id'>
 
 export type Workout = {
+    notes: any;
     user_name: string,
     weight: number,
     timestamp: string,
