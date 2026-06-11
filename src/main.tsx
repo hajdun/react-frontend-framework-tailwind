@@ -9,7 +9,7 @@ import Nutrition from "./pages/Nutrition"
 import Workouts from "./pages/Workouts"
 import PostWorkout from "./pages/PostWorkout"
 import Settings from './pages/Settings'
-import DashBoard from './pages/DashBoard'
+import Dashboard from './pages/Dashboard'
 import ActivitiesAdmin from './pages/ActivitiesAdmin'
 
 const router = createBrowserRouter([
@@ -17,7 +17,7 @@ const router = createBrowserRouter([
     path: '/',
     element: <BasePage />,   // ← wraps everything
     children: [
-      { index: true, element: <DashBoard /> },
+      { index: true, element: <Dashboard /> },
       { path: '/nutition', element: <Nutrition /> },
       { path: '/workout', element: <Workouts /> },
       { path: '/post_workout', element: <PostWorkout /> },
