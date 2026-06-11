@@ -181,3 +181,15 @@ A structure like this keeps shared UI separate from feature-level logic and make
 ## Notes
 
 This repository is best used as a learning project for practicing frontend architecture, component reuse, styling discipline, and integration with external services. It can also serve as a base for a more complete fitness dashboard or mobile-inspired workout tracker.
+
+## Dependency docs
+
+dependency docs: https://github.com/sverweij/dependency-cruiser
+graphviz vscode: "Graphviz Interactive Preview"
+
+run
+```
+npx depcruise src --include-only "^src" --output-type dot > dependencygraph.dot
+```
+
+preview: run graphviz vscode extension on output.dot
