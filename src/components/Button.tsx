@@ -40,6 +40,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
     className?: string;
     leftIcon?: ReactNode;
     rightIcon?: ReactNode;
+    buttonId?: string;
 };
 
 
@@ -51,12 +52,14 @@ export default function Button({
     leftIcon,
     rightIcon,
     disabled,
+    buttonId = "",
     ...props
 }: ButtonProps) {
     return (
         <button
             className={`${variants[variant]} ${sizes[size]} ${className}`}
             disabled={disabled}
+            data-test={`button-${buttonId}`}
             {...props}
         >
             <>
