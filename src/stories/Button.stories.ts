@@ -11,11 +11,20 @@ export default {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'ghost'],
+      options: ['primary', 'secondary', 'ghost', 'danger', 'continue', 'card-pill'],
     },
     size: {
       control: 'select',
-      options: ['sm', 'md', 'lg'],
+      options: ['sm', 'md', 'lg', 'xl'],
+    },
+    className: {
+      control: 'text',
+    },
+    leftIcon: {
+      control: 'text',
+    },
+    rightIcon: {
+      control: 'text',
     },
     children: {
       control: 'text',

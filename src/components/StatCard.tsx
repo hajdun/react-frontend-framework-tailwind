@@ -1,43 +1,64 @@
+import type { ReactNode } from "react";
 import Card from "./Card";
 
 type StatCardProps = {
     label: string;
-    value: string;
-    unit: string;
-    delta: number;
-    deltaLabel: string;
+    value: string | number;
+    unit?: string;
+    delta?: number;
+    deltaLabel?: string;
     icon?: ReactNode;
 };
-
-import type { ReactNode } from "react";
 
 export default function StatCard({
     label,
     value,
-    unit,
-    delta,
-    deltaLabel,
+    unit = "",
+    delta = 0,
+    deltaLabel = "",
     icon,
 }: StatCardProps) {
     const positive = delta > 0;
     const neutral = delta === 0;
 
     return (
-        <Card>
-            <div className="flex items-start justify-between mb-3">
-                <p className="text-xs text-muted font-medium uppercase tracking-wide">{label}</p>
-                {icon && <span className="text-primary opacity-70">{icon}</span>}
+        <Card className="rounded-[22px] bg-white shadow-[0_4px_20px_rgba(29,22,23,0.07)] border border-white px-5 py-4">
+            <div className="mb-2 flex items-start justify-between gap-3">
+                <p className="text-[11px] font-medium tracking-[0.02em] text-[#ADA4A5]">
+                    {label}
+                </p>
+
+                {icon && (
+                    <span className="text-[#7B61FF] opacity-80 [&_svg]:h-4 [&_svg]:w-4">
+                        {icon}
+                    </span>
+                )}
             </div>
-            <p className="text-2xl font-semibold text-text tabular-nums">
-                {value}
-                <span className="text-sm font-normal text-muted ml-1">{unit}</span>
-            </p>
-            <p
-                className={`text-xs mt-1.5 ${neutral ? "text-faint" : positive ? "text-success" : "text-warning"
-                    }`}
-            >
-                {neutral ? "—" : positive ? `↑ ${delta}` : `↓ ${Math.abs(delta)}`}{" "}
-                {deltaLabel}
+
+            <div className="flex items-end gap-1">
+                <p className="text-[24px] font-semibold leading-none tracking-[-0.02em] text-[#C084FC] tabular-nums">
+                    {value}
+                </p>
+
+                {unit && (
+                    <span className="pb-0.5 text-[12px] font-medium text-[#C084FC]">
+                        {unit}
+                    </span>
+                )}
+            </div>
+
+            <p className="mt-2 text-[12px] font-medium text-[#ADA4A5]">
+                {neutral ? (
+                    "No change"
+                ) : positive ? (
+                    <span className="text-[#3DDAB4]">
+                        +{delta} {deltaLabel}
+                    </span>
+                ) : (
+                    <span className="text-[#FF6B9D]">
+                        -{Math.abs(delta)} {deltaLabel}
+                    </span>
+                )}
             </p>
         </Card>
     );

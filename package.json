@@ -14,9 +14,13 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
     "@tanstack/react-form": "^1.33.0",
+    "@tanstack/react-table": "^8.21.3",
+    "firebase": "^12.14.0",
+    "papaparse": "^5.5.3",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "react-router-dom": "^7.16.0"
+    "react-router-dom": "^7.16.0",
+    "tailwindcss": "^4.3.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.2.1",
@@ -25,6 +29,7 @@
     "@storybook/addon-docs": "^10.4.1",
     "@storybook/addon-vitest": "^10.4.1",
     "@storybook/react-vite": "^10.4.1",
+    "@types/papaparse": "^5.5.2",
     "@types/react": "^19.2.16",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",

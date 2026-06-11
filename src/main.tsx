@@ -5,11 +5,13 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import BasePage from './components/BasePage'
 
-import Dashboard from "./pages/Dashboard"
 import Nutrition from "./pages/Nutrition"
-import Progress from "./pages/Progress"
 import Workouts from "./pages/Workouts"
-import Form from "./pages/Form"
+import PostWorkout from "./pages/PostWorkout"
+import Settings from './pages/Settings'
+import Dashboard from './pages/Dashboard'
+import ActivitiesAdmin from './pages/ActivitiesAdmin'
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -17,9 +19,10 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Dashboard /> },
       { path: '/nutition', element: <Nutrition /> },
-      { path: '/progress', element: <Progress /> },
       { path: '/workout', element: <Workouts /> },
-      { path: '/form', element: <Form /> }
+      { path: '/post_workout', element: <PostWorkout /> },
+      { path: '/settings', element: <Settings /> },
+      { path: '/activity_admin', element: <ActivitiesAdmin /> }
     ]
   },
 ])

@@ -1,41 +1,21 @@
-import { Outlet, NavLink } from 'react-router-dom'
+import { Outlet } from "react-router-dom";
 
-const NAV = [
-    { to: '/', label: 'Dashboard', end: true },
-    { to: '/workout', label: 'Workouts' },
-    { to: '/nutition', label: 'Nutrition' },
-    { to: '/progress', label: 'Progress' },
-    { to: '/form', label: 'Form' },
-]
+import Header from "./Header";
+
 
 function BasePage() {
 
     return (
-        <div >
-            <header >
-                <nav>
-                    {NAV.map(({ to, label, end }) => (
-                        <NavLink
-                            key={to}
-                            to={to}
-                            end={end as boolean}
-                            className={({ isActive }) =>
-                                `px-3 py-2 rounded-lg text-sm transition-colors ${isActive
-                                    ? 'bg-[oklch(from_var(--color-primary)_l_c_h_/_0.1)] text-primary font-medium'
-                                    : 'text-muted hover:bg-[var(--color-surface-offset)] hover:text-text'
-                                }`
-                            }
-                        >
-                            {label}
-                        </NavLink>
-                    ))}
-                </nav>
-            </header>
-            <main style={{ maxWidth: '960px', margin: '0 auto', padding: 'var(--space-8) var(--space-4)' }}>
-                <Outlet />
+        <div className="min-h-dvh bg-[#FCFCFC] text-[#1D1617]">
+            <Header />
+
+            <main className="mx-auto max-w-[1180px] px-4 py-8 sm:px-6 lg:px-8">
+                <div className="rounded-[28px] bg-white p-4 shadow-[0_12px_40px_rgba(29,22,23,0.05)] sm:p-6 lg:p-8">
+                    <Outlet />
+                </div>
             </main>
         </div>
-    )
+    );
 }
 
-export default BasePage
+export default BasePage;
